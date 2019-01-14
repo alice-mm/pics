@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="keywords" content="photos,photographie,photography,beaujolais,alice">
+    <meta name="description" content="Photos.">
+    <meta name="author" content="Alice">
+    
+    <title>Alice M. – Photos, WRITE DATE OR SOMETHING HERE</title>
+    
+    <style>
+div, html, body {
+  padding: 0;
+  margin: 0;
+  background-color: #f5f5f5;
+}
+
+body {
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+.slideshow-and-dots {
+  max-width: 100vw;
+  max-height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link-to-site {
+  font-size: 1.25rem;
+  margin: 0.333em 0 0 0.667em;
+  align-self: flex-start;
+}
+
+.link-to-site * {
+  color: inherit;
+}
+
+.slideshow-container {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mySlides {
+  /* Hide the images by default */
+  display: none;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.mySlides .img-wrapper {
+  max-width: 75%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.mySlides .img-wrapper img {
+  max-width: 65vw;
+  max-height: 75vh;
+  width: auto;
+  height: auto;
+}
+
+.prev, .next {
+  cursor: pointer;
+  padding: 5ex 1vh 5ex 1vh;
+  color: #555;
+  font-weight: bold;
+  font-size: 36px;
+  transition: 0.6s ease;
+  background-color: rgba(0,0,0,0.0375);
+}
+
+.prev {
+  border-radius: 0 1ex 1ex 0;
+  margin-right: 4px;
+}
+
+.next {
+  border-radius: 1ex 0 0 1ex;
+  margin-left: 4px;
+}
+
+.prev:hover, .next:hover {
+  background-color: rgba(50,75,125,0.15);
+}
+
+.mySlides .text {
+  font-size: 18px;
+  max-width: 32em;
+  padding: 8px 12px;
+  flex-grow: 0;
+  max-height: 80vh;
+  height: auto;
+  overflow-y: auto;
+  position: relative;
+}
+
+.mySlides.only-text .text {
+  max-width: 38em;
+}
+
+.pic-meta + p {
+  margin-top: 0;
+}
+
+.mySlides .text .pic-meta {
+  font-family: monospace;
+  color: #bbb;
+  font-size: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.dots-wrapper {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.dot {
+  cursor: pointer;
+  height: 20px;
+  width: 20px;
+  margin: 3px;
+  background-color: #ddd;
+  border-radius: 50%;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #34B0D6;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 0.5s;
+  animation-name: fade;
+  animation-duration: 0.5s;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .55}
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .55}
+  to {opacity: 1}
+}
+
+@media all and (orientation: portrait) {
+  .mySlides {
+    flex-direction: column;
+  }
+  
+  .mySlides .img-wrapper img {
+    max-width: 80vw;
+    max-height: 50vh;
+  }
+  
+  .mySlides .text {
+    font-size: 15px;
+    max-height: 40vh;
+  }
+  
+  .mySlides.only-text .text {
+    max-height: 80vh;
+  }
+}
+
+@media (max-width: 750px) and (max-height: 700px) {
+  .mySlides .text {
+    font-size: 13px;
+  }
+}
+
+@media (orientation: landscape) and (min-width: 1000px) {
+  .mySlides .text {
+    font-size: 20px;
+  }
+}
+
+@media (orientation: landscape) and (min-width: 1300px) {
+  .mySlides .text {
+    font-size: 22px;
+  }
+}
+    </style>
+</head>
+
+<body>
+    <div class="slideshow-and-dots">
+        <p class="link-to-site"><a href="http://www.alicem.net/">← alicem.net</a></p>
+        
+        <div class="slideshow-container">
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            
+            <div class="mySlides fade only-text">
+                <div class="text">
+                    <p>Foo bar.</p>
+                    
+                    <p>Plop plup.</p>
+                </div>
+            </div>
+            
+            <!-- === INSERT SLIDES HERE === -->
+
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+
+        <div class="dots-wrapper">
+            <!-- === INSERT DOTS HERE === -->
+        </div>
+    </div> <!-- /.slideshow-and-dots -->
+    
+    <script>
+var slides = document.getElementsByClassName("mySlides");
+var dots = document.getElementsByClassName("dot");
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "flex";
+  dots[slideIndex-1].className += " active";
+  window.location.hash = '#p' + slideIndex;
+}
+
+function checkKey(e) {
+  /* Weird stuff for old IE. */
+  e = e || window.event;
+  
+  if(e.keyCode === 37) {
+    // ←
+    plusSlides(-1)
+  } else if(e.keyCode === 39) {
+    // →
+    plusSlides(1)
+  } else if(e.keyCode === 36) {
+    // Home
+    currentSlide(1)
+  } else if(e.keyCode === 35) {
+    // End
+    currentSlide(slides.length)
+  }
+}
+
+if(window.location.hash && (slideIndex = window.location.hash.replace(/[^0-9]/g, ""))) {
+  slideIndex = Math.max(1, slideIndex);
+  slideIndex = Math.min(slides.length, slideIndex);
+  currentSlide(slideIndex);
+} else {
+  currentSlide(1);
+}
+
+document.onkeydown = checkKey;
+    </script>
+</body>
+</html>
