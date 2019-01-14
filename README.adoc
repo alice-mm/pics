@@ -1,0 +1,111 @@
+# Basic raw / JPEG slideshow
+
+This is a simple personal project used to:
+
+* Apply RawTherapee `.pp3` processing profile files to raw (`.RW2`) and JPEG pictures.
+* Export these pictures to lightweight JPEG files.
+* Use these new JPEG files to create a static HTML slideshow ready for web upload.
+* Add HTML descriptions to each picture for the slideshow.
+
+https://en.wikipedia.org/wiki/RawTherapee
+
+
+# Files
+
+## Scripts and tools
+
+`convert.sh`::
+    This converts your high-quality pictures into lightweight versions, applying RawTherapee processing profiles along the way.
+
+`generate.sh`::
+    This generates the HTML slideshow and its assets (the pictures), using what was generated using `convert.sh`.
+
+`Makefile`::
+    If you installed `make`, this allows you to run a few rules:
+    * `make convert` → `convert.sh`
+    * `make generate` → `generate.sh`
+    * `make` → combination of `convert` and `generate`.
+    * `make clean` → Remove `build/` and `pics/`.
+
+
+## Stuff you (kinda) have to manage yourself
+
+`pics_hq/`::
+    This is where your original-quality raw and JPEG files should be stored, along with the specific `.pp3` files that should be applied to them.
+
+`descriptions/`::
+    For each picture, if a file named from that picture's name with an appended `.html` is found in there, this file will be used as the pictures description. For example, if you have a `foo.jpg` in `pics_hq/`, its description will be in `descriptions/foo.jpg.html`.
+
+`index.html`::
+    This is the skeleton for the HTML file containing the final slideshow. I write the introductory slide in there, and the CSS is bundled in it too. Edit it to adjust the page's title and the introduction, I guess. It contains placeholders for the main slides and the navigation dots; do not touch that.
+
+`exporting.pp3`::
+    An additional processing profile that gets applied to _every picture_, but _after_ the picture-specific profiles. I use it to choose the export dimensions, apply post-resizing sharpening, strip GPS metadata, and add an artist name to pictures.
+
+
+## Stuff that gets automatically generated
+
+`pics/`::
+    This is where the new versions of your pictures end up after export, etc.
+
+`build/`::
+    This contains the static HTML slideshow and its assets after generation. I generally copy the whole content of this directory to my website once everything looks fine, or open `build/index.html` locally with a web browser to check the result.
+
+
+# Usage, step by step
+
+1. Choose a bunch of pictures (JPEG or RW2 files).
+2. Use RawTherapee to post-process them as you like. Export the resulting processing profiles (`.pp3` files) with “correct” names (see <<naming-pp3,Naming your processing profiles>>).
+3. Store the initial pictures from Step 1 into `pics_hq/` along with the `.pp3` files from Step 2.
+4. Edit the `index.html` file found at the root of the project:
+    a. Change the page's title (within `<title>…</title>`).
+    b. Edit the content of the introductory slide:
++
+[source,html]
+```
+<div class="mySlides fade only-text">
+    <div class="text">
+        <p>Plop plup.</p>
+
+        <p>Foo bar.</p>
+    </div>
+</div>
+```
+    c. I guess you'll also want to change this:
++
+[source,html]
+```
+<p class="link-to-site"><a href="http://www.alicem.net/">← alicem.net</a></p>
+```
+5. Edit the common export processing profile, found at the root as `exporting.pp3`:
+    a. Change the Artist's name.
+    b. Optionally, make sure the resizing bounding box suits your fancy, and edit anything you like. This is none of my concern, actually.
+6. Run `./convert.sh` to populate `pics/`.
+7. Run `./generate.sh` to populate `build/`.
+8. Check the result by opening `build/index.html` with the web browser of your liking. If there's an issue with the pictures, fix whatever needs to be fixed and go back to Step 6. To fix descriptions and stuff, however, you only need to rerun `./generate.sh`.
+
+
+[[naming-pp3]]
+# Naming your processing profiles
+
+When I want to check the result of my postprocessing, I export my files to JPEG files with names like `foo_edit.JPG` in order to make sure the postprocessed files are easily discernible from the original ones.
+
+* `foo.jpg` → `foo_edit.JPG`
+* `foo.RW2` → `foo_edit.JPG`
+* `foo_edit.jpg` → `foo_edit_edit.JPG`
+
+You'll notice that the original file extension actually doesn't matter at all. I strip it and append `_edit.JPG` to the name.
+
+These `_edit` JPEG files are not actually used in the final slideshow. I just want to make sure the result looks good.
+
+Now back to the point: since the `.pp3` processing profiles are saved alongside the exported files and named after them, I end up with files like `foo_edit.JPG.out.pp3`. This is the convention used in this project to find the processing profile corresponding to each file. So for example, for a picture `pics_hq/foo.RW2`, the processing profile that will be applied will be `pics_hq/foo_edit.JPG.out.pp3`.
+
+[TIP]
+====
+This behaviour can be changed without much hassle, especially if you have at least a little knowledge in Bash. The `convert.sh` script contains a function used to obtain the path to the processing profile for a given picture. By changing the implementation of this function (and the related unit-test-ish things I wrote), you should be able to use whatever convention you want for this. For example, for a ``foo.RW2`` ⇔ ``foo.pp3`` version, one could write something like:
+
+[source,bash]
+```
+printf '%s.pp3' "${1%.*}"
+```
+====
