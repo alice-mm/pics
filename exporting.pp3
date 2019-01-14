@@ -1,0 +1,35 @@
+[Version]
+AppVersion=5.4
+Version=331
+
+[Resize]
+Enabled=true
+Scale=0.35999999999999999
+AppliesTo=Cropped area
+Method=Lanczos
+DataSpecified=3
+Width=1750
+Height=1750
+
+[PostResizeSharpening]
+Enabled=true
+Method=rld
+Radius=0.5
+Amount=200
+Threshold=20;80;2000;1200;
+OnlyEdges=false
+EdgedetectionRadius=1.8999999999999999
+EdgeTolerance=1800
+HalocontrolEnabled=false
+HalocontrolAmount=85
+DeconvRadius=0.45000000000000001
+DeconvAmount=100
+DeconvDamping=0
+DeconvIterations=100
+
+[MetaData]
+Mode=1
+
+[Exif]
+Artist=Alice M. www.alicem.net
+GPSInfo=#delete
