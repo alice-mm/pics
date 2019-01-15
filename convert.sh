@@ -71,12 +71,9 @@ function test_main {
 
 # Just making sure a few things are not empty.
 function test_config {
-    assert test "$PICS_HQ_SRC_DIR"
-    assert test "$PICS_LQ_OUT_DIR"
-    assert test "$JPG_SUBSAMPLING"
-    assert test "$JPG_QUALITY"
-    assert test "$RESIZING_PROFILE"
-    assert test "$RAWCLI"
+    : ${PICS_HQ_SRC_DIR:?} ${PICS_LQ_OUT_DIR:?}
+    : ${JPG_SUBSAMPLING:?} ${JPG_QUALITY:?}
+    : ${RESIZING_PROFILE:?} ${RAWCLI:?}
 }
 
 function test_get_pic_out_profile {
