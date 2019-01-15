@@ -67,7 +67,7 @@ function get_metadata_string {
 }
 
 # $1    A picture. Note that the LQ equivalent from OUT_PICS_DIR
-#       will be used instead.
+#       will be used instead: “path/to/foo” → “$OUT_PICS_DIR/foo”.
 # stdout → HTML code for a slide for the provided picture.
 function gen_slide_html {
     local bname
@@ -79,6 +79,11 @@ function gen_slide_html {
     file="$OUT_PICS_DIR"/"$bname"
     path_from_index_to_pic="$(basename "$OUT_PICS_DIR")"/"$bname"
     text=$( get_pic_description "$file" )
+    if [ -z "$text" ]
+    then
+        printf '%s: Warning: Description empty or missing for: %s\n' \
+                "$(basename "$0")" "$file" >&2
+    fi
     meta=$( get_metadata_string "$file" )
     
     if [ "$meta" ]
