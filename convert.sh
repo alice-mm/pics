@@ -69,6 +69,7 @@ function test_main {
     done
 }
 
+# Just making sure a few things are not empty.
 function test_config {
     assert test "$PICS_HQ_SRC_DIR"
     assert test "$PICS_LQ_OUT_DIR"
@@ -98,29 +99,30 @@ rm -frv -- "$PICS_LQ_OUT_DIR"/*
 
 for pic in "$PICS_HQ_SRC_DIR"/*.{jpg,jpeg,JPG,JPEG,RW2}
 do
+    # Skipping garbage and unmatched patterns.
     if [ ! -r "$pic" ] || [ ! -f "$pic" ]
     then
         continue
     fi
     
-    profile=$(get_pic_out_profile "$pic")
+    # Start building the rawtherapee-cli command.
+    unset -v params
+    params=(-o "$PICS_LQ_OUT_DIR"/)
     
-    if [ ! -r "$profile" ] || [ ! -f "$profile" ]
+    # Add picture-specific profile if available.
+    profile=$(get_pic_out_profile "$pic")
+    if [ -r "$profile" ] && [ -f "$profile" ]
     then
-        printf 'Missing or unreadable profile “%q” for “%q”.\n' \
-                "$profile" "$pic" >&2
-        continue
+        params+=(-p "$profile")
+    else
+        printf '%s: Warning: Missing or unreadable profile “%q” for “%q”.\n' \
+                "$(basename "$0")" "$profile" "$pic" >&2
     fi
     
-    params=(
-        -o "$PICS_LQ_OUT_DIR"/
-        
-        -p "$profile"
+    params+=(
         -p "$RESIZING_PROFILE"
-        
         -j"$JPG_QUALITY"
         -js"$JPG_SUBSAMPLING"
-        
         -c "$pic"
     )
     
@@ -133,4 +135,4 @@ do
     fi
 done
 
-echo "$(basename "$0"): All done."
+printf '%s: All done.\n' "$(basename "$0")"
