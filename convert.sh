@@ -101,6 +101,12 @@ do
     then
         continue
     fi
+
+    # Skipping “_edit” pictures that are exported mostly to check the processing profiles.
+    if [[ "$pic" =~ _edit\.JPG$ ]]
+    then
+        continue
+    fi
     
     # Start building the rawtherapee-cli command.
     unset -v params
