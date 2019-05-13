@@ -136,6 +136,17 @@ do
         printf 'Conversion failed with status %d.\n' "$status"
         exit "$status"
     fi
+    
+    if type exiv2 &> /dev/null
+    then
+        # Writing metadata separately because RawTherapee 5.4 seems to be
+        # bad at reading them from RW2 files…
+        exiv2 -pa "$pic" 2> /dev/null > "$PICS_LQ_OUT_DIR"/"$(
+            basename "$pic" | sed '
+                s/\.[^.]*$//
+            '
+        )".metadata || true
+    fi
 done
 
 printf '%s: All done.\n' "$(basename "$0")"
