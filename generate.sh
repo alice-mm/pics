@@ -19,8 +19,8 @@ cd "$(readlink -f "$0" | xargs dirname)"
 # === Functions ===
 
 function clean_build_dir {
-    rm -fr "$BUILD_DIR"
-    mkdir -p "$OUT_PICS_DIR"
+    rm -fr -- "$BUILD_DIR"
+    mkdir -p -- "$OUT_PICS_DIR"
 }
 
 # $1    Picture. Only its basename will ultimately be used.
@@ -31,7 +31,7 @@ function get_pic_description {
     file="$DESCR_DIR"/"$(basename "$1")".html
     if [ -r "$file" ] && [ -f "$file" ]
     then
-        cat "$file"
+        cat -- "$file"
     fi
 }
 
@@ -44,7 +44,7 @@ function get_metadata_string {
     local expt=$( exif -mt 'Exposure Time' "$1" )
     local isos=$( exif -mt 'ISO Speed Ratings' "$1" )
     
-    local res=''
+    local res
     
     test "$date" && res+="$date"
     if [ "$fnum" ]
@@ -75,10 +75,10 @@ function gen_slide_html {
     local path_from_index_to_pic
     local text
     
-    bname="$(basename "${1:?}")"
+    bname=$(basename "${1:?}")
     file="$OUT_PICS_DIR"/"$bname"
     path_from_index_to_pic="$(basename "$OUT_PICS_DIR")"/"$bname"
-    text=$( get_pic_description "$file" )
+    text=$(get_pic_description "$file")
     if [ -z "$text" ]
     then
         printf '%s: Warning: Description empty or missing for: %s\n' \
