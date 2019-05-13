@@ -85,6 +85,25 @@ https://en.wikipedia.org/wiki/RawTherapee
 8. Check the result by opening `build/index.html` with the web browser of your liking. If there's an issue with the pictures, fix whatever needs to be fixed and go back to Step 6. To fix descriptions and stuff, however, you only need to rerun `./generate.sh`.
 
 
+# GPS information
+
+If `exiv2` is installed, lots of metadata can be extracted from the original files (whereas RawTherapee 5.4 seems to be having issues with my GPS data).
+
+To prevent location information from appearing in the slideshow, edit `generate.sh` to replace…
+
+[source,bash]
+```
+declare -r SHOULD_USE_GPS_INFO=1
+```
+
+… with…
+
+[source,bash]
+```
+declare -r SHOULD_USE_GPS_INFO=''
+```
+
+
 [[naming-pp3]]
 # Naming your processing profiles
 
