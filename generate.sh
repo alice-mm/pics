@@ -179,11 +179,12 @@ function get_gps_url {
 # $1    A JPG picture.
 # stdout → A string containing some EXIF metadata, if available.
 function get_metadata_string {
-    : ${1:?}
-    local date=$( exif -mt 'Date and Time (Original)' "$1" )
-    local fnum=$( exif -mt 'F-Number' "$1" )
-    local expt=$( exif -mt 'Exposure Time' "$1" )
-    local isos=$( exif -mt 'ISO Speed Ratings' "$1" )
+    : "${1:?}"
+    local date=$(exif -mt DateTimeOriginal "$1")
+    local fnum=$(exif -mt FNumber "$1")
+    local expt=$(exif -mt ExposureTime "$1")
+    local isos=$(exif -mt ISOSpeedRatings "$1")
+    local flen=$(exif -mt FocalLength "$1")
     
     local gps_url
     local location
@@ -195,32 +196,22 @@ function get_metadata_string {
     
     local res
     
-    test "$date" && res+="$date"
-    if [ "$fnum" ]
-    then
-        test "$res" && res+='  '
-        res+="$fnum"
-    fi
-    if [ "$expt" ]
-    then
-        test "$res" && res+='  '
-        res+="$expt"
-    fi
-    if [ "$isos" ]
-    then
-        test "$res" && res+='  '
-        res+="ISO $isos"
-    fi
+    res=$date
+    # Note that the first space is an U+00A0. Prevent collapse.
+    # One day I’ll use CSS.          ↓
+    if [ "$fnum" ]; then res+=${res:+  }$fnum; fi
+    if [ "$expt" ]; then res+=${res:+  }$expt; fi
+    if [ "$isos" ]; then res+="${res:+  }ISO ${isos}"; fi
+    if [ "$flen" ]; then res+=${res:+  }$flen; fi
+    
     if [ "$gps_url" ]
     then
-        test "$res" && res+='  '
-        res+="<a class=\"gps-link\" target=\"_blank\" href=\"${gps_url}\">&#x1F310</a>"
-    fi+="ISO $isos"
+        res+="${res:+  }<a class=\"gps-link\" target=\"_blank\" href=\"${gps_url}\">&#x1F310;</a>"
     fi
+
     if [ "$location" ]
     then
-        test "$res" && res+='<br>'
-        res+=$location
+        res+=${res:+<br>}$location
     fi
     
     printf '%s\n' "$res"
