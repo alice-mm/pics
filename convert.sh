@@ -21,7 +21,14 @@ declare -r JPG_QUALITY=88
 # resizing and optional other things.
 declare -r RESIZING_PROFILE=exporting.pp3
 
+# Use of the RawTherapee CLI has changed with time, and may also depend on
+# how you install it.
+# See:
+# https://web.archive.org/web/20230913115838/https://discuss.pixls.us/t/app-image-of-rawtherapee-cli/15704/7
+# … as well as the examples below.
 declare -ra RAWCLI=(rawtherapee-cli)
+#declare -ra RAWCLI=(/home/myname/bin/RawTherapee_5.8.AppImage --cli)
+#declare -ra RAWCLI=(/home/myname/bin/RawTherapee_5.9_extracted/usr/bin/rawtherapee-cli)
 
 cd "$(readlink -f "$0" | xargs dirname)"
 
